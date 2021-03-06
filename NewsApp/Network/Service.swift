@@ -8,7 +8,7 @@
 import Foundation
 
 /// HTTPMethodTypes
-enum HTTPMethod:String {
+enum HTTPMethod: String {
     // implement more when needed: post, put, delete etc.
     case get = "GET"
 }
@@ -39,7 +39,7 @@ extension Service {
         switch method {
         case .get:
         // add query items to url
-            guard let parameters = parameters as? [String:String] else {
+            guard let parameters = parameters as? [String: String] else {
                 fatalError("parameters for GET http method must conform to [String: String]")
             }
             urlComponents?.queryItems = parameters.map {URLQueryItem(name: $0.key, value: $0.value)}

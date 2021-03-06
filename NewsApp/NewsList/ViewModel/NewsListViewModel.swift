@@ -15,7 +15,7 @@ class NewsListViewModel {
         self.service = service
     }
     
-    func fetch(){
+    func fetch() {
         
     }
 }

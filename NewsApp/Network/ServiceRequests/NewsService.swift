@@ -9,7 +9,7 @@ import Foundation
 
 /// This Servcie holds all APIs related to News
 enum NewsService {
-    case newsItem(category : String)
+    case newsItem(category: String)
 }
 
 extension NewsService: Service {
@@ -19,15 +19,18 @@ extension NewsService: Service {
     
     var path: String {
         switch self {
-        case .newsItem(_):
+        case .newsItem:
             return ServiceConstants.newsItemsAPI
         }
     }
     
-    var parameters: [String : Any]? {
-        /// FIXME:- fix default params
+    var parameters: [String: Any]? {
         /// default params
-        var params:[String:Any] = ["categorySet":"cbc-news-apps","typeSet":"cbc-news-apps-feed-v2","excludedCategorySet":"cbc-news-apps-exclude","page":1,"pageSize":20]
+        var params: [String: Any] = ["categorySet": "cbc-news-apps",
+                                    "typeSet": "cbc-news-apps-feed-v2",
+                                    "excludedCategorySet": "cbc-news-apps-exclude",
+                                    "page": 1,
+                                    "pageSize": 20]
         switch self {
         case .newsItem(let category):
             params["lineupSlug"] = category
@@ -37,14 +40,9 @@ extension NewsService: Service {
     
     var method: HTTPMethod {
         switch self {
-        case .newsItem(_):
+        case .newsItem:
             return .get
         }
     }
     
-    
 }
-
-
-
-

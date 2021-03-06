@@ -13,17 +13,17 @@ enum Result<T> {
 }
 
 enum NetworkError: Error {
-    case badURL, requestFailed, unknown , decodeFailed
+    case badURL, requestFailed, unknown, decodeFailed
 }
 
 /// Class that will actually handle the API calls with a URLSession and resturn response
-class ServiceProvider<T:Service> {
-    //MARK:- Properties
+class ServiceProvider<T: Service> {
+    // MARK: - Properties
     var urlSession = URLSession.shared
     
 }
 
-//MARK:- Public funcs
+// MARK: - Public funcs
 extension ServiceProvider {
     
     /// Performs API request which is called by any service class
@@ -31,10 +31,9 @@ extension ServiceProvider {
     /// - Parameters:
     ///     - service: any service that confirms to Service protocol
     ///     - completion: Request completion Handler, will be returning Data
-    func loadService(service:T, completion:@escaping(Result<Data>) -> Void) {
+    func loadService(service: T, completion: @escaping(Result<Data>) -> Void) {
         executeRequest(service.urlRequest, completion: completion)
     }
-    
     
     /// Performs API request which is called by any service class
     ///
@@ -56,8 +55,7 @@ extension ServiceProvider {
                 do {
                     let response = try decoder.decode(decodeType, from: data)
                     completion(.success(response))
-                }
-                catch {
+                } catch {
                     completion(.failure(.decodeFailed))
                 }
             case .failure(let error):
@@ -68,7 +66,7 @@ extension ServiceProvider {
     }
 }
 
-//MARK:- Private funcs
+// MARK: - Private funcs
 extension ServiceProvider {
     
     private func executeRequest(
@@ -76,9 +74,9 @@ extension ServiceProvider {
         completion:@escaping(Result<Data>)
     -> Void) {
         
-        urlSession.dataTask(with: request) { data, _ , error in
+        urlSession.dataTask(with: request) { data, _, error in
             
-            if let data = data  {
+            if let data = data {
                 /// success: send data back
                 completion(.success(data))
             } else if error != nil {
