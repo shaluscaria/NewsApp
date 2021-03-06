@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+class NewsListViewModel {
+    let service: NewsService
+    var news: News?
+    
+    init(service: NewsService) {
+        self.service = service
+    }
+    
+    func fetch(){
+        
+    }
+}
