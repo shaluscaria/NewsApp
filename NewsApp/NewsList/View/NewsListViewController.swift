@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  NewsListViewController.swift
 //  NewsApp
 //
 //  Created by Shalu Scaria on 2021-03-05.
@@ -7,13 +7,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+final class NewsListViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        self.navigationItem.title = "NEWS App"
     }
-
-
 }
-
