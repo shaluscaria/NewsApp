@@ -8,13 +8,21 @@
 import Foundation
 
 /// This Servcie holds all APIs related to News
-enum NewsService {
+public enum NewsEndPoint {
     case newsItem(category: String)
 }
 
-extension NewsService: Service {
-    var baseURL: String {
+extension NewsEndPoint: EndPointType {
+    
+    var environmentBaseURL: String {
         return ServiceConstants.baseURL
+    }
+    
+    var baseURL: URL {
+        guard let url = URL(string: environmentBaseURL) else {
+            fatalError("baseURL could not be configured")
+        }
+        return url
     }
     
     var path: String {
@@ -24,13 +32,13 @@ extension NewsService: Service {
         }
     }
     
-    var parameters: [String: Any]? {
+    var parameters: [String: String]? {
         /// default params
-        var params: [String: Any] = ["categorySet": "cbc-news-apps",
+        var params: [String: String] = ["categorySet": "cbc-news-apps",
                                     "typeSet": "cbc-news-apps-feed-v2",
                                     "excludedCategorySet": "cbc-news-apps-exclude",
-                                    "page": 1,
-                                    "pageSize": 20]
+                                    "page": "1",
+                                    "pageSize": "20"]
         switch self {
         case .newsItem(let category):
             params["lineupSlug"] = category
