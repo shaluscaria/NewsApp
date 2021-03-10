@@ -15,7 +15,7 @@ final class AppRouter {
     }
     
     func start() {
-        let rootViewController = NewsListViewController.instantiateViewController()
+        let rootViewController = NewsListBuilder.make()
         let navigationController = UINavigationController(rootViewController: rootViewController)
         
         window?.rootViewController = navigationController

@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// This Servcie holds all APIs related to News
+/// confirms to protocol EndPointType
 public enum NewsEndPoint {
     case newsItem(category: String)
 }
@@ -36,7 +36,7 @@ extension NewsEndPoint: EndPointType {
         /// default params
         var params: [String: String] = ["categorySet": "cbc-news-apps",
                                     "typeSet": "cbc-news-apps-feed-v2",
-                                    "excludedCategorySet": "cbc-news-apps-exclude",
+                                    "excludedCategorySettttt": "cbc-news-apps-exclude",
                                     "page": "1",
                                     "pageSize": "20"]
         switch self {

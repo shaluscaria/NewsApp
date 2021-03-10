@@ -17,7 +17,7 @@ enum NetworkError: Error {
 }
 
 /// Class that will actually handle the API calls with a URLSession and resturn response
-class ServiceProvider<T: Service> {
+class ServiceProvider<T: EndPointType> {
     // MARK: - Properties
     var urlSession = URLSession.shared
     
@@ -29,25 +29,27 @@ extension ServiceProvider {
     /// Performs API request which is called by any service class
     ///
     /// - Parameters:
-    ///     - service: any service that confirms to Service protocol
+    ///     - endPoint: any service that confirms to Service protocol
     ///     - completion: Request completion Handler, will be returning Data
-    func loadService(service: T, completion: @escaping(Result<Data>) -> Void) {
-        executeRequest(service.urlRequest, completion: completion)
+    func loadService(endPoint: T, completion: @escaping(Result<Data>) -> Void) {
+        let urlRequest = makeRequest(with: endPoint)
+        executeRequest(urlRequest, completion: completion)
     }
     
     /// Performs API request which is called by any service class
     ///
     /// - Parameters:
-    ///     - service: any service that confirms to Service protocol
+    ///     - endPoint: any service that confirms to Service protocol
     ///     - decodeType: decodable object.type
     ///     - completion: Request completion Handler
     func load<U>(
-        service: T,
+        endPoint: T,
         decodeType: U.Type,
         completion:@escaping(Result<U>)
     -> Void) where U: Decodable {
         
-        executeRequest(service.urlRequest) { result in
+        let urlRequest = makeRequest(with: endPoint)
+        executeRequest(urlRequest) { result in
             
             switch result {
             case .success(let data):
@@ -69,21 +71,48 @@ extension ServiceProvider {
 // MARK: - Private funcs
 extension ServiceProvider {
     
+    private func makeRequest(with endPoint: EndPointType) -> URLRequest {
+        
+        var request = URLRequest(url: endPoint.baseURL.appendingPathComponent(endPoint.path))
+        request.httpMethod = endPoint.method.rawValue
+        
+        guard let parameters =  endPoint.parameters else {
+            fatalError("parameters for GET http method must conform to [String: String]")
+        }
+        
+        if var urlComponents =  URLComponents(url: endPoint.baseURL,
+                                              resolvingAgainstBaseURL: false) {
+            for (key, value) in parameters {
+                let valueWithAllowedChar = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+                let queryItem = URLQueryItem(name: key,
+                                             value: valueWithAllowedChar)
+                urlComponents.queryItems?.append(queryItem)
+            }
+            request.url = urlComponents.url
+        }
+        request.setValue("application/x-www-form-urlencoded; charset=utf-8",
+                         forHTTPHeaderField: "Content-Type")
+        return request
+    }
+    
     private func executeRequest(
         _ request: URLRequest,
         completion:@escaping(Result<Data>)
     -> Void) {
         
-        urlSession.dataTask(with: request) { data, _, error in
+        urlSession.dataTask(with: request) { data, response, error in
             
-            if let data = data {
-                /// success: send data back
-                completion(.success(data))
-            } else if error != nil {
-                /// any sort of network failure
+            if error != nil {
                 completion(.failure(.requestFailed))
-            } else {
-                completion(.failure(.unknown))
+            }
+            
+            if let response = response as? HTTPURLResponse {
+               if response.statusCode == 200 {
+                    if let data = data {
+                        /// success: send data back
+                        completion(.success(data))
+                    }
+               }
             }
         }.resume()
     }
