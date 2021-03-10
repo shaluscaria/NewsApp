@@ -18,5 +18,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         router.start()
         return true
     }
-
 }
