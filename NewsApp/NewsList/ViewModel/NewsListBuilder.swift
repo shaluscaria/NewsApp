@@ -10,7 +10,8 @@ import UIKit
 final class NewsListBuilder {
     
     static func make() -> NewsListViewController {
-        let newsListVC = NewsListViewController.instantiateViewController()
+        let newsListVC = NewsListViewController.instantiateViewController(
+                            with: Constants.StoryBoard.NewsList)
         let serviceProvider = ServiceProvider<NewsEndPoint>()
         
         newsListVC.viewModel = NewsListViewModel(serviceProvider: serviceProvider)

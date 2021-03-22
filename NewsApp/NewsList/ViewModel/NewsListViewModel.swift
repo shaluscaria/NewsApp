@@ -32,8 +32,8 @@ class NewsListViewModel: NewsListViewModelProtocol {
             case .success(let newsResponse):
                 // Caching news element
                 let news = newsResponse
-                self.cache[self.newsId] = news.map { $0}
-                self.cache.saveToDisk()
+                self.cache[self.newsId] = news.map {$0}
+                self.cache.saveToDisk(with: Constants.FilePath.newsListFilePath)
                 self.delegate?.handleViewModelOutput(.showNewsList(newsResponse))
             }
         }
@@ -41,10 +41,41 @@ class NewsListViewModel: NewsListViewModelProtocol {
     
     func retrieveData() {
         self.delegate?.handleViewModelOutput(.setTitle("News"))
-        let newsList = self.cache.retrieveFromDisk(forKey: newsId)
+        let newsList = retrieveDataFromDisk(Constants.FilePath.newsListFilePath, for: newsId)
         guard let news = newsList  else {
             return
         }
         self.delegate?.handleViewModelOutput(.showNewsList(news))
+    }
+    
+    // Save news to separate file to load in Saved News
+    func saveNewsToDisk(_ news: NewsElement) {
+        // get saved news if any
+        var newsList: [NewsElement] = []
+        let retrievedNews = retrieveDataFromDisk(Constants.FilePath.savedNewsFilePath, for: newsId)
+        
+        if let retrievedNews = retrievedNews {
+            newsList.append(contentsOf: retrievedNews)
+        }
+        
+        if !newsList.contains(news) {
+            newsList.append(news)
+        }
+       
+        let cache = Cache<NewsElement.ID, [NewsElement]>()
+        cache[self.newsId] = newsList.map {$0}
+        cache.saveToDisk(with: Constants.FilePath.savedNewsFilePath)
+    }
+    
+}
+
+// MARK: - Private Methods
+private extension NewsListViewModel {
+    func retrieveDataFromDisk(_ fileName: String, for key: NewsElement.ID) -> [NewsElement]? {
+        let newsList = self.cache.retrieveFromDisk(fileName, forKey: key)
+        guard let news = newsList  else {
+            return nil
+        }
+        return news
     }
 }

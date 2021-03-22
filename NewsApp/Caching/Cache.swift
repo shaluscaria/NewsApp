@@ -16,25 +16,19 @@ final class Cache<Key: Hashable, Value> {
     // Lifetime with a default value of 24hrs
     private let entryLifetime: TimeInterval
     private let keyTracker = KeyTracker()
-    private let fileManager = FileManager.default
-    private let cacheDirectory: URL
     
     init(dateProvider: @escaping () -> Date = Date.init,
          entryLifetime: TimeInterval = 24 * 60 * 60,
-         maximumEntryCount: Int = 20,
-         directory: FileManager.SearchPathDirectory = .cachesDirectory,
-         searchPathDomainMask: FileManager.SearchPathDomainMask = .userDomainMask) {
+         maximumEntryCount: Int = 20) {
         self.dateProvider = dateProvider
         self.entryLifetime = entryLifetime
         wrapped.countLimit = maximumEntryCount
         wrapped.delegate = keyTracker
-        let folderURLs = self.fileManager.urls(for: directory, in: searchPathDomainMask)
-        self.cacheDirectory = folderURLs[0].appendingPathComponent("NewsList.json")
     }
 }
 
 // MARK: - Utiltity methods
-private extension Cache {
+extension Cache {
     // Inserting a value for a given key
     func insert(_ value: Value, forKey key: Key) {
         let date = dateProvider().addingTimeInterval(entryLifetime)
@@ -63,7 +57,7 @@ private extension Cache {
 }
 
 // MARK: - Utility methods
-private extension Cache {
+extension Cache {
     // get entry for a given key
     func entry(forKey key: Key) -> Entry? {
         guard let entry = wrapped.object(forKey: WrappedKey(key)) else {
@@ -84,7 +78,7 @@ private extension Cache {
 }
 
 // MARK: - WrappedKey class
-private extension Cache {
+extension Cache {
     // Wraps public facing Key to make them NSCache compatible
     final class WrappedKey: NSObject {
         let key: Key
@@ -108,7 +102,7 @@ private extension Cache {
 }
 
 // MARK: - Entry class
-private extension Cache {
+extension Cache {
     // Stores a value instance
     final class Entry {
         let key: Key
@@ -175,33 +169,35 @@ extension Cache: Codable where Key: Codable, Value: Codable {
         try container.encode(keyTracker.keys.compactMap(entry))
     }
     
-    func saveToDisk() {
+    func saveToDisk(with fileName: String) {
         let encoder = JSONEncoder()
+        let cacheDirectory = self.getDirectoryURL(fileName)
         do {
             let data = try encoder.encode(self)
             try data.write(to: cacheDirectory)
-//            print("Cache directory AbsoluteString:", cacheDirectory.absoluteString)
-//            print("Cache directory Path:", cacheDirectory.path)
-//            let fileExists = FileManager.default.fileExists(atPath: cacheDirectory.path)
-//            print("File exists:", fileExists)
-//            let decoder = JSONDecoder()
-//            let rdata = try Data(contentsOf: URL(fileURLWithPath: cacheDirectory.path))
-//            print("Rdata:", rdata)
-//            let entry = try decoder.decode(Cache.self, from: rdata)
         } catch {
             fatalError(error.localizedDescription)
         }
     }
     
-    func retrieveFromDisk(forKey key: Key) -> Value? {
+    func retrieveFromDisk(_ path: String, forKey key: Key) -> Value? {
         let decoder = JSONDecoder()
+        let cacheDirectory = getDirectoryURL(path)
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: cacheDirectory.path))
             let cached = try decoder.decode(Cache.self, from: data)
             return cached.value(forKey: key)
         } catch {
-            fatalError(error.localizedDescription)
+            print(error.localizedDescription)
+            return nil
         }
         
     }
+    
+    func getDirectoryURL(_ fileName: String) -> URL {
+        let folderURLs = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let cacheDirectory = folderURLs[0].appendingPathComponent(fileName)
+        return cacheDirectory
+    }
+    
 }

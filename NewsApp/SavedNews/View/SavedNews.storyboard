@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="E4s-LS-vR4">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Saved News View Controller-->
+        <scene sceneID="W6B-cJ-OCL">
+            <objects>
+                <viewController id="E4s-LS-vR4" customClass="SavedNewsViewController" customModule="NewsApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="H8u-Yj-3mp">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vzw-lE-O0C">
+                                <rect key="frame" x="0.0" y="44" width="414" height="200"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbt-pr-qZx">
+                                        <rect key="frame" x="186.5" y="90" width="41.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="cbt-pr-qZx" firstAttribute="centerX" secondItem="Vzw-lE-O0C" secondAttribute="centerX" id="Bdd-lR-gH0"/>
+                                    <constraint firstItem="cbt-pr-qZx" firstAttribute="centerY" secondItem="Vzw-lE-O0C" secondAttribute="centerY" id="IYy-AN-AAu"/>
+                                    <constraint firstAttribute="height" constant="200" id="ctQ-Kf-MoG"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="pNW-Y2-7aj"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iWJ-om-p9B">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="MRj-kX-QF7"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iWJ-om-p9B" firstAttribute="leading" secondItem="MRj-kX-QF7" secondAttribute="leading" id="AQP-1L-VaX"/>
+                            <constraint firstItem="Vzw-lE-O0C" firstAttribute="leading" secondItem="H8u-Yj-3mp" secondAttribute="leading" id="B4m-00-KtA"/>
+                            <constraint firstItem="MRj-kX-QF7" firstAttribute="trailing" secondItem="iWJ-om-p9B" secondAttribute="trailing" id="EOA-2b-kWy"/>
+                            <constraint firstItem="Vzw-lE-O0C" firstAttribute="top" secondItem="MRj-kX-QF7" secondAttribute="top" id="GKM-W4-wqe"/>
+                            <constraint firstItem="MRj-kX-QF7" firstAttribute="bottom" secondItem="iWJ-om-p9B" secondAttribute="bottom" id="aqX-jZ-ycs"/>
+                            <constraint firstItem="iWJ-om-p9B" firstAttribute="top" secondItem="MRj-kX-QF7" secondAttribute="top" id="f2a-Pk-zce"/>
+                            <constraint firstAttribute="trailing" secondItem="Vzw-lE-O0C" secondAttribute="trailing" id="t74-zb-8N7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emptyTitleLabel" destination="cbt-pr-qZx" id="kpn-pn-sfY"/>
+                        <outlet property="newsTableView" destination="iWJ-om-p9B" id="Su3-WI-cSU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eE2-Kc-Usg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-104" y="108"/>
+        </scene>
+    </scenes>
+</document>
