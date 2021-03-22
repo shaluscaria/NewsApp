@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,8 +36,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="qfU-tD-Lho">
-                                        <rect key="frame" x="0.0" y="102" width="200" height="35"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qfU-tD-Lho">
+                                        <rect key="frame" x="0.0" y="102" width="344" height="35"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="XeB-6O-3sf">
                                                 <rect key="frame" x="0.0" y="0.0" width="80" height="35"/>
@@ -54,20 +55,32 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="March 10" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N4Q-2N-QXh">
-                                                <rect key="frame" x="85" y="0.0" width="115" height="35"/>
+                                                <rect key="frame" x="90" y="0.0" width="214" height="35"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="18N-0t-OYG">
+                                                <rect key="frame" x="314" y="0.0" width="30" height="35"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="UrT-ml-wyY"/>
+                                                </constraints>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal">
+                                                    <imageReference key="image" image="download" symbolScale="large"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="downloadNewsOnButtonClick:" destination="gVl-Fv-Iwf" eventType="touchUpInside" id="q0K-1q-Opc"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="200" id="ddC-c3-Tth"/>
-                                        </constraints>
                                     </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="qfU-tD-Lho" secondAttribute="bottom" constant="15" id="I2n-hV-tfE"/>
+                                    <constraint firstAttribute="trailing" secondItem="qfU-tD-Lho" secondAttribute="trailing" id="NCq-as-3uO"/>
                                     <constraint firstAttribute="trailing" secondItem="U10-CX-Mny" secondAttribute="trailing" id="Owp-rl-26Y"/>
                                     <constraint firstItem="qfU-tD-Lho" firstAttribute="top" secondItem="U10-CX-Mny" secondAttribute="bottom" constant="15" id="bH3-va-vmJ"/>
                                     <constraint firstItem="U10-CX-Mny" firstAttribute="leading" secondItem="tzN-pc-vKp" secondAttribute="leading" id="g9w-VA-UiC"/>
@@ -98,6 +111,7 @@
             <size key="customSize" width="600" height="343"/>
             <connections>
                 <outlet property="coverImageView" destination="w5H-u2-1pe" id="IOg-2u-Qx0"/>
+                <outlet property="downloadButton" destination="18N-0t-OYG" id="h06-1a-PNx"/>
                 <outlet property="postedDateLabel" destination="N4Q-2N-QXh" id="h4g-0z-jmw"/>
                 <outlet property="titleLabel" destination="U10-CX-Mny" id="N0Y-3F-KN4"/>
                 <outlet property="typeFilterButton" destination="XeB-6O-3sf" id="du1-lf-YYg"/>
@@ -105,4 +119,7 @@
             <point key="canvasLocation" x="-1233.3333333333335" y="-169.41964285714286"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="download" width="24" height="24"/>
+    </resources>
 </document>

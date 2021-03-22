@@ -18,4 +18,23 @@ struct Constants {
         static let primaryTextColor = UIColor.white
         
     }
+    
+    struct FilePath {
+        static let newsListFilePath = "NewsList.json"
+        static let savedNewsFilePath = "SavedNewsList.json"
+    }
+    
+    struct ViewCells {
+        static let savedNewsCell = "SavedNewsCell"
+    }
+    
+    struct StoryBoard {
+        static let NewsList = "NewsList"
+        static let SavedNews = "SavedNews"
+    }
+    
+    struct SavedNews {
+        static let emptyCellTitle = "No Saved News Available"
+    }
+    
 }

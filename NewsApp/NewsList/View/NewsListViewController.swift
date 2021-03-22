@@ -32,12 +32,11 @@ class NewsListViewController: UIViewController {
         viewModel?.delegate = self
         checkInternetConnection()
         setUpCollectionView()
-        setLayoutSwitch()
+        setUpRightBarButtonItems()
         
         NotificationCenter.default.addObserver(self, selector: #selector(notifyConnectionChanges),
                                                name: UIApplication.willEnterForegroundNotification,
                                                object: nil)
-        
     }
     
     deinit {
@@ -47,6 +46,15 @@ class NewsListViewController: UIViewController {
 
 // MARK: - NewsListViewModelDelegate delegate methods
 extension NewsListViewController: NewsListViewModelDelegate {
+    func navigate(to navigationType: NavigationType) {
+        switch navigationType {
+        case .savedNews:
+            let viewModel = SavedNewsViewModel()
+            let viewController = SavedNewsBuilder.make(with: viewModel)
+            show(viewController, sender: nil)
+        }
+    }
+    
     func handleViewModelOutput(_ output: NewsListViewModelOutput) {
         DispatchQueue.main.async {
             switch output {
@@ -65,12 +73,18 @@ extension NewsListViewController: NewsListViewModelDelegate {
 // MARK: - Private methods
 private extension NewsListViewController {
     
-    func setLayoutSwitch() {
-        let image = UIImage(named: "layoutIcon")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: image,
-                                                                style: .plain,
-                                                                target: self,
-                                                                action: #selector(changeLayout))
+    func setUpRightBarButtonItems() {
+        let layout = UIImage(named: "layoutIcon")
+        let download = UIImage(named: "download")
+        let layoutChangeButton = UIBarButtonItem(image: layout,
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(changeLayout))
+        let downloadButton = UIBarButtonItem(image: download,
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(didTapDownloadButton))
+        self.navigationItem.rightBarButtonItems = [layoutChangeButton, downloadButton]
         self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.primaryTextColor
     }
     
@@ -100,6 +114,7 @@ private extension NewsListViewController {
         self.navigationController?.navigationBar.barStyle = .default
         
         self.navigationController?.navigationBar.barTintColor = Constants.Color.primaryRedColor
+        self.navigationController?.navigationBar.tintColor = Constants.Color.primaryTextColor
         let textAttribute = [NSAttributedString.Key.foregroundColor: Constants.Color.primaryTextColor]
             self.navigationController?.navigationBar.titleTextAttributes = textAttribute
     }
@@ -118,9 +133,13 @@ extension NewsListViewController {
         self.newsCollectionView?.reloadData()
     }
     
+    @objc func didTapDownloadButton() {
+        self.navigate(to: .savedNews)
+    }
+    
     @objc func cancelFilter() {
         self.state = .normal
-        setLayoutSwitch()
+        setUpRightBarButtonItems()
         self.newsCollectionView?.reloadData()
     }
     
@@ -239,6 +258,12 @@ extension NewsListViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - NewsViewCell Delegate
 extension NewsListViewController: NewsViewCellDelegate {
+    
+    func saveNews(_ news: NewsElement) {
+        viewModel?.saveNewsToDisk(news)
+        showAlert(title: "", message: "News downloaded", actions: nil)
+    }
+    
     func filterNewsBy(filter filterType: String) {
         if let news = self.news {
             state = .filtered
@@ -246,7 +271,6 @@ extension NewsListViewController: NewsViewCellDelegate {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                                      target: self,
                                                                      action: #selector(cancelFilter))
-            self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.primaryTextColor
             self.newsCollectionView?.reloadData()
         }
     }

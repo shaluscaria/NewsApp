@@ -10,8 +10,8 @@ import UIKit
 // MARK: - instantiate viewcontrollers from storyboard
 extension UIViewController {
     
-    static func instantiateViewController(_ bundle: Bundle? = nil) -> Self {
-        let storyboard = UIStoryboard(name: "Main", bundle: bundle)
+    static func instantiateViewController(with name: String, _ bundle: Bundle? = nil) -> Self {
+        let storyboard = UIStoryboard(name: name, bundle: bundle)
         guard let viewController = storyboard.instantiateInitialViewController() as? Self else {
             fatalError("Cannot instantiate initial view controller \(Self.self) from storyboard")
         }
